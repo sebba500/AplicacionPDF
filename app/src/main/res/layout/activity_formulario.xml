@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="Suspicious0dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtFormulario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="Formulario"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <!--
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher" /> -->
+
+
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nombre de la empresa"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/EditTextNombreEmpresa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Coca Cola" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Direccion de la empresa"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/EditTextDireccionEmpresa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Calle falsa #123" />
+
+            <TextView
+                android:id="@+id/txtRBD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="RBD"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/EditTextRBD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:text="Ingrese RBD" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tipo de servicio"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/RGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/RServicio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Servicio" />
+
+                <RadioButton
+                    android:id="@+id/RControl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Control" />
+
+            </RadioGroup>
+
+
+            <!-- Formulario de checkboxs -->
+
+            <TextView
+                android:id="@+id/txtControl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Control de Roedores"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"/>
+
+            <CheckBox
+                android:id="@+id/RBpe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:text="Perimetro Exterior" />
+
+            <CheckBox
+                android:id="@+id/RBpi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Perimetro Interior" />
+
+            <CheckBox
+                android:id="@+id/RBb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Bodegas" />
+
+
+            <!-- -->
+
+
+            <TextView
+                android:id="@+id/txtControlInsectos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Control de Insectos"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"/>
+
+            <CheckBox
+                android:id="@+id/RBext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:text="Exterior" />
+
+            <CheckBox
+                android:id="@+id/RBint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Interior" />
+
+            <CheckBox
+                android:id="@+id/RBbo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Bodegas" />
+
+            <!-- -->
+
+            <TextView
+                android:id="@+id/txtControlMicroorganismos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Control de Microorganismos"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"/>
+
+            <CheckBox
+                android:id="@+id/RBsha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:text="Serv. Hig. Adm." />
+
+            <CheckBox
+                android:id="@+id/RBshc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Serv. Hig. Camarines" />
+
+            <CheckBox
+                android:id="@+id/RBcamF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Camara de Frio" />
+
+
+            <!-- -->
+
+            <TextView
+                android:id="@+id/txtDesrratisacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Desratizacion"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"/>
+
+            <CheckBox
+                android:id="@+id/RBbroma"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:text="Bromadiolona" />
+
+            <CheckBox
+                android:id="@+id/RBtrampa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Trampa Captura Viva" />
+
+            <CheckBox
+                android:id="@+id/RBnotoxico"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="No toxico" />
+
+            <!-- -->
+
+            <TextView
+                android:id="@+id/txtDesisn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Desinsectacion"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"/>
+
+            <CheckBox
+                android:id="@+id/RBCipermetrina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:text="Cipermetrina 25%" />
+
+            <CheckBox
+                android:id="@+id/RBDeltametrina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Deltametrina" />
+
+            <CheckBox
+                android:id="@+id/RBAquatrin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Aquatrin" />
+
+            <CheckBox
+                android:id="@+id/RBAgita"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Agita" />
+
+
+            <!-- -->
+
+            <TextView
+                android:id="@+id/txtSaniti"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sanitizacion"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"/>
+
+            <CheckBox
+                android:id="@+id/RBSanicitrex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:text="Sanicitrex" />
+
+            <!-- -->
+
+            <TextView
+                android:id="@+id/txtObs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Observaciones"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"/>
+
+
+
+
+            <EditText
+                android:id="@+id/EditTextObservacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:text="Ingrese Observaciones" />
+
+            <!-- Fin formulario -->
+
+
+            <Button
+                android:id="@+id/button_save"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="20dp"
+                android:text="Guardar Orden"
+                android:onClick="pdfApp"/>
+
+            <Button
+                android:onClick="sendEmail"
+                android:id="@+id/button_send"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="Enviar Orden"/>
+
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
