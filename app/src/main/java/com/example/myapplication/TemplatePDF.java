@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -24,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +57,8 @@ public class TemplatePDF {
 
 
     public TemplatePDF(Context context) {
+
+
 
         this.context = context;
     }
@@ -99,19 +103,24 @@ public class TemplatePDF {
         documento.addAuthor(autor);
     }
 
+
+
+
+
+
     public void addTitles(String title, String subTitle) {
 
+
         try {
-            //Image img = Image.getInstance(Objects.requireNonNull(getClass().getResource("drawable/images/")));
-            //img.scaleToFit(100, 100);
-            //img.setAlignment(Chunk.ALIGN_LEFT);
 
             paragraph = new Paragraph();
             addChildP(new Paragraph(title, fTitle));
             addChildP(new Paragraph(subTitle, fSubTitle));
             paragraph.setSpacingAfter(30);
-            //documento.add(img);
+
+
             documento.add(paragraph);
+
         } catch (Exception e) {
             Log.e("addTitles", e.toString());
         }
@@ -143,6 +152,16 @@ public class TemplatePDF {
         paragraph.add(childParagraph);
     }
 
+
+    public void addImage(Image image){
+        try {
+
+            image.setAlignment(Image.LEFT);
+            image.scalePercent(50);
+            documento.add(image);
+        }catch (Exception e){}
+
+    }
 
     public void addParagraph(String text) {
         try {

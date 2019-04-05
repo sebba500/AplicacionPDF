@@ -3,6 +3,9 @@ package com.example.myapplication;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 //import android.media.Image;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
@@ -17,13 +20,16 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
 
 
 public class Formulario extends AppCompatActivity {
@@ -220,13 +226,34 @@ public class Formulario extends AppCompatActivity {
 
 
 
+        AssetManager mngr = getAssets();
+        InputStream is = mngr.open("antimouse.png");
+        Bitmap bmp = BitmapFactory.decodeStream(is);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        Image image = Image.getInstance(stream.toByteArray());
+
+
+
+
+
+
         templatePDF.abrirDocumento();
         templatePDF.addMetaData("OrdenDeTrabajo","OrdenDeTrabajo","Antimouse");
         //templatePDF.addContact(Cell,web);
+        templatePDF.addImage(image);
         templatePDF.addTitles("ORDEN DE TRABAJO","N°000001");
         templatePDF.addParagraph("Nombre empresa: " + txtNombreEmpresa.getText().toString());
         templatePDF.addParagraph("Direccion empresa: " + txtDireccionEmpresa.getText().toString());
+
+
+        /*
+           ----------------------------------------------------------------------
+           |            poner servicio y RBD                                    |
+           ----------------------------------------------------------------------
+         */
         templatePDF.addParagraph("Fecha: "+ timeStamp);
+
 
         templatePDF.createTable(header,getFila1());
         templatePDF.createTable(header2,getFila2());
