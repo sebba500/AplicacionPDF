@@ -2,15 +2,14 @@ package com.example.myapplication;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-//import android.media.Image;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,6 +18,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.myapplication.controller.EmpresaController;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,14 +30,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
+//import android.media.Image;
 
 
 public class Formulario extends AppCompatActivity {
 
     //Variables
-    private EditText txtNombreEmpresa, txtDireccionEmpresa, txtObservaciones;
+    private EditText txtNombreEmpresa, txtDireccionEmpresa, txtRBDEmpresa, txtObservaciones;
     private Button btnGuardar, btnEnviar;
     private RadioGroup RGroup;
     private RadioButton RadioServicio, RadioControl;
@@ -81,13 +82,14 @@ public class Formulario extends AppCompatActivity {
         setContentView(R.layout.activity_formulario);
 
 
-        txtNombreEmpresa = (EditText)findViewById(R.id.EditTextNombreEmpresa);
-        txtDireccionEmpresa = (EditText)findViewById(R.id.EditTextDireccionEmpresa);
-        btnGuardar = (Button)findViewById(R.id.button_save);
-        btnEnviar = (Button)findViewById(R.id.button_send);
-        RGroup = (RadioGroup)findViewById(R.id.RGroup);
-        RadioServicio = (RadioButton)findViewById(R.id.RServicio);
-        RadioControl = (RadioButton) findViewById(R.id.RControl);
+        txtNombreEmpresa = findViewById(R.id.EditTextNombreEmpresa);
+        txtDireccionEmpresa = findViewById(R.id.EditTextDireccionEmpresa);
+        txtRBDEmpresa=findViewById(R.id.EditTextRBD);
+        btnGuardar =findViewById(R.id.button_save);
+        btnEnviar =findViewById(R.id.button_send);
+        RGroup = findViewById(R.id.RGroup);
+        RadioServicio = findViewById(R.id.RServicio);
+        RadioControl =  findViewById(R.id.RControl);
         //Checkboxs
         //---Primer----
         CheckRBpe = (CheckBox) findViewById(R.id.RBpe);
@@ -226,6 +228,7 @@ public class Formulario extends AppCompatActivity {
 
 
 
+        //Añadir imagen
         AssetManager mngr = getAssets();
         InputStream is = mngr.open("antimouse.png");
         Bitmap bmp = BitmapFactory.decodeStream(is);
@@ -253,6 +256,7 @@ public class Formulario extends AppCompatActivity {
            ----------------------------------------------------------------------
          */
         templatePDF.addParagraph("Fecha: "+ timeStamp);
+        templatePDF.addParagraph("RBD: "+ txtRBDEmpresa);
 
 
         templatePDF.createTable(header,getFila1());
@@ -262,6 +266,27 @@ public class Formulario extends AppCompatActivity {
         templatePDF.addParagraph("Observaciones");
         templatePDF.addParagraph(txtObservaciones.getText().toString());
         templatePDF.closeDocument();
+
+        EmpresaController controller = new EmpresaController(getApplicationContext());
+
+
+        if (controller.existeono(txtNombreEmpresa.getText().toString())==true) {
+            Toast.makeText(getApplicationContext(), "hola", Toast.LENGTH_LONG).show();
+
+            try {
+                controller.crearEmpresa(txtNombreEmpresa.getText().toString(), txtDireccionEmpresa.getText().toString(), txtRBDEmpresa.getText().toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+
+
+            }
+        }else {
+            Toast.makeText(getApplicationContext(), "chao", Toast.LENGTH_LONG).show();
+
+        }
+
+
+
 
 
         //Ver PDF
