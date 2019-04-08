@@ -256,7 +256,7 @@ public class Formulario extends AppCompatActivity {
            ----------------------------------------------------------------------
          */
         templatePDF.addParagraph("Fecha: "+ timeStamp);
-        templatePDF.addParagraph("RBD: "+ txtRBDEmpresa);
+        templatePDF.addParagraph("RBD: "+ txtRBDEmpresa.getText().toString());
 
 
         templatePDF.createTable(header,getFila1());
@@ -270,22 +270,24 @@ public class Formulario extends AppCompatActivity {
         EmpresaController controller = new EmpresaController(getApplicationContext());
 
 
-        if (controller.existeono(txtNombreEmpresa.getText().toString())==true) {
-            Toast.makeText(getApplicationContext(), "hola", Toast.LENGTH_LONG).show();
+       /* if (controller.existeono(txtNombreEmpresa.getText().toString())) {
+
 
             try {
                 controller.crearEmpresa(txtNombreEmpresa.getText().toString(), txtDireccionEmpresa.getText().toString(), txtRBDEmpresa.getText().toString());
+                Toast.makeText(getApplicationContext(), "creado", Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 e.printStackTrace();
 
 
+
             }
         }else {
-            Toast.makeText(getApplicationContext(), "chao", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "ya existe", Toast.LENGTH_LONG).show();
 
         }
 
-
+       */
 
 
 

@@ -21,6 +21,8 @@ public class EmpresaModel {
         SQLiteDatabase db= this.dbHelper.getWritableDatabase();
 
         db.insert(TABLE_NAME,null,empresa);
+
+        db.close();
     }
 
     public boolean ExisteONo(String nombre) {
@@ -47,11 +49,12 @@ public class EmpresaModel {
 
         //DEFINIR COLUMNAS QUE INTERESAN
         String []projection={
+
                 EmpresaDBContract.EmpresaTabla.COLUMN_NAME_NOMBRE,
 
         };
 
-        String selection=EmpresaDBContract.EmpresaTabla.COLUMN_NAME_NOMBRE + " = ? ";
+        String selection=EmpresaDBContract.EmpresaTabla.COLUMN_NAME_NOMBRE + " = ? LIMIT 1";
         String[] selectionArgs={nombre};
 
         //CONSULTA
@@ -81,6 +84,7 @@ public class EmpresaModel {
 
 
 
+        cursor.close();
         return usuario;
     }
 

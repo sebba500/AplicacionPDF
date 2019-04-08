@@ -27,13 +27,21 @@ public class EmpresaController {
     }
 
     public boolean existeono(String nombre){
+        ContentValues usuario= this.empresaModel.obtenerNombrePorNombre(nombre);
 
-        boolean result = this.empresaModel.ExisteONo(nombre);
+        if (usuario ==null){
 
+            return false;
 
+        }
 
+        if (nombre.equals(usuario.get(EmpresaDBContract.EmpresaTabla.COLUMN_NAME_NOMBRE))){
 
+            return true;
 
-        return result;
+        }
+
+        return false;
     }
+
 }
