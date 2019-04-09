@@ -328,7 +328,7 @@ public class Formulario extends AppCompatActivity {
 
         try {
             startActivity(Intent.createChooser(emailIntent, "Enviar email..."));
-            finish();
+
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(Formulario.this,
                     "No tienes clientes de email instalados.", Toast.LENGTH_SHORT).show();
