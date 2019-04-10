@@ -2,7 +2,10 @@ package com.example.myapplication;
 
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -19,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.myapplication.model.EmpresaDBContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +51,16 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //INICIAR SESION AUTOMATICAMENTE SI YA INICIÓ ANTERIORMENTE
+        SharedPreferences sesion = getSharedPreferences(EmpresaDBContract.Sesion.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+        boolean loggedIn = sesion.getBoolean(EmpresaDBContract.Sesion.FIELD_SESSION, false);
+        if (loggedIn) {
+            Intent i = new Intent(MainActivity.this, Formulario.class);
+            startActivity(i);
+            finish();
+        }
+
 
         //pregunto por los permisos.
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -84,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 JSONObject o = json.getJSONObject(i);
                                 String idUsuario = o.getString("id");
-                                String nombre = o.getString("name");
+                                String rutA = o.getString("rut");
                                 String clave = o.getString("password");
 
 
@@ -124,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void formulario(View view){
 
+
+
         txtRut= findViewById(R.id.input_rut);
         txtPassword= findViewById(R.id.input_contraseña);
 
@@ -133,23 +149,51 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, Formulario.class);
 
 
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Autenticando...");
+        progressDialog.show();
+
+
         if (rut.isEmpty()) {
 
             txtRut.setError("El Campo esta vacio");
             txtRut.requestFocus();
+            progressDialog.dismiss();
             return;
         }else if (password.isEmpty()){
 
             txtPassword.setError("El Campo esta vacio");
             txtPassword.requestFocus();
+            progressDialog.dismiss();
             return;
 
         }else if (rut.equals("198153567")  &&password.equals("contraseña")){
 
             startActivity(intent);
+            progressDialog.dismiss();
+
+            SharedPreferences sesion = getSharedPreferences(EmpresaDBContract.Sesion.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sesion.edit();
+
+            editor.putBoolean(EmpresaDBContract.Sesion.FIELD_SESSION, true);
+            editor.putString(EmpresaDBContract.Sesion.FIELD_USERNAME, rut);
+
+
+
+
+            editor.putString(EmpresaDBContract.Sesion.FIELD_ID, "1");
+
+
+
+
+            editor.commit();
+
+            finish();
 
         }else{
 
+            progressDialog.dismiss();
             Toast.makeText(getApplicationContext(), "Datos incorrectos", Toast.LENGTH_SHORT).show();
 
         }

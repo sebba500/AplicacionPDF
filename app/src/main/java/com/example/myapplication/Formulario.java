@@ -1,7 +1,10 @@
 package com.example.myapplication;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +12,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,6 +25,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.myapplication.controller.EmpresaController;
+import com.example.myapplication.model.EmpresaDBContract;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 
@@ -74,6 +81,60 @@ public class Formulario extends AppCompatActivity {
     String Sanicitrex = "   ";
 
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the main_menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_principal_salir, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()) {
+            case R.id.action_salir:
+
+                final AlertDialog.Builder alerta=new AlertDialog.Builder(this);
+                alerta.setMessage("Realmente desea cerrar sesion?");
+                alerta.setTitle("Cerrar sesion");
+                alerta.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        SharedPreferences sesiones = getSharedPreferences(EmpresaDBContract.Sesion.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sesiones.edit();
+
+                        editor.putBoolean(EmpresaDBContract.Sesion.FIELD_SESSION, false);
+                        editor.putString(EmpresaDBContract.Sesion.FIELD_USERNAME, "");
+                        editor.commit();
+
+                        Intent i = new Intent(Formulario.this, MainActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+                alerta.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog dialog=alerta.create();
+                dialog.show();
+
+
+
+
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
 
 
     @Override
