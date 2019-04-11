@@ -375,25 +375,29 @@ public class Formulario extends AppCompatActivity {
 
 
     public void sendEmail(View view) {
-        String[] correo = {""};
-        String[] CC = {""};
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        Uri uri =Uri.fromFile((new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"/PDF/OrdenDeTrabajo.pdf")));
-        emailIntent.setData(Uri.parse("mailto:"));
-        emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, correo);
-        emailIntent.putExtra(Intent.EXTRA_CC, CC);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Orden de Trabajo");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "");
-        emailIntent.putExtra(Intent.EXTRA_STREAM,uri);
 
-        try {
-            startActivity(Intent.createChooser(emailIntent, "Enviar email..."));
 
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(Formulario.this,
-                    "No tienes clientes de email instalados.", Toast.LENGTH_SHORT).show();
-        }
+
+            String[] correo = {""};
+            String[] CC = {""};
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            Uri uri = Uri.fromFile((new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/PDF/OrdenDeTrabajo.pdf")));
+            emailIntent.setData(Uri.parse("mailto:"));
+            emailIntent.setType("text/plain");
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, correo);
+            emailIntent.putExtra(Intent.EXTRA_CC, CC);
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Orden de Trabajo");
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+            emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
+
+            try {
+                startActivity(Intent.createChooser(emailIntent, "Enviar email..."));
+
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(Formulario.this,
+                        "No tienes clientes de email instalados.", Toast.LENGTH_SHORT).show();
+            }
+
     }
 
 
