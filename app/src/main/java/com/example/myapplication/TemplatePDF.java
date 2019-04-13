@@ -1,16 +1,12 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
@@ -21,20 +17,16 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
-
-import com.itextpdf.text.Image;
 
 
-public class TemplatePDF {
+public class TemplatePDF extends AppCompatActivity {
+
+
 
     private Context context;
     public static File archivoPDF;
@@ -82,6 +74,10 @@ public class TemplatePDF {
     //METODO PARA CREAR EL DOCUMENTO
     public void crearPDF() {
 
+
+
+
+
         Date date = new Date() ;
         String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(date);
         File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),"PDF");
@@ -90,6 +86,9 @@ public class TemplatePDF {
             folder.mkdir();
         archivoPDF = new File(folder, "OT_"+ NombreEmpresa +"_" + Direccion + "_" + timeStamp +".pdf");
         nombreArchivo = "OT_"+ NombreEmpresa +"_" + Direccion + "_" + timeStamp +".pdf";
+
+
+
 
     }
 

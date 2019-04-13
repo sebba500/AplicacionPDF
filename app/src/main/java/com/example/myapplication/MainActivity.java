@@ -82,9 +82,40 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        final String url = "http://192.168.1.101/DoorSystem/public/api/profesor";
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+    public void formulario(View view){
+
+        final String url = "https://cybertechnologiapiapk2.000webhostapp.com/api/empresa";
 
         final RequestQueue queue = Volley.newRequestQueue(this);
+
+
+
+        txtRut= findViewById(R.id.input_rut);
+        txtPassword= findViewById(R.id.input_contraseña);
+
+        final String rut = txtRut.getText().toString();
+        final String password = txtPassword.getText().toString();
+
+        final Intent intent = new Intent(this, Formulario.class);
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Autenticando...");
+        progressDialog.show();
 
         final JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
@@ -97,13 +128,55 @@ public class MainActivity extends AppCompatActivity {
                             for (int i = 0; i < json.length(); i++) {
 
                                 JSONObject o = json.getJSONObject(i);
-                                String idUsuario = o.getString("id");
+
                                 String rutA = o.getString("rut");
                                 String clave = o.getString("password");
 
 
 
 
+                                if (rut.isEmpty()) {
+
+                                    txtRut.setError("El Campo esta vacio");
+                                    txtRut.requestFocus();
+                                    progressDialog.dismiss();
+                                    return;
+                                }else if (password.isEmpty()){
+
+                                    txtPassword.setError("El Campo esta vacio");
+                                    txtPassword.requestFocus();
+                                    progressDialog.dismiss();
+                                    return;
+
+                                }else if (rut.equals("123456789")  &&password.equals(clave)){
+
+                                    startActivity(intent);
+                                    progressDialog.dismiss();
+
+                                    SharedPreferences sesion = getSharedPreferences(EmpresaDBContract.Sesion.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sesion.edit();
+
+                                    editor.putBoolean(EmpresaDBContract.Sesion.FIELD_SESSION, true);
+                                    editor.putString(EmpresaDBContract.Sesion.FIELD_USERNAME, rut);
+
+
+
+
+                                    editor.putString(EmpresaDBContract.Sesion.FIELD_ID, "1");
+
+
+
+
+                                    editor.commit();
+
+                                    finish();
+
+                                }else{
+
+                                    progressDialog.dismiss();
+                                    Toast.makeText(getApplicationContext(), "Datos incorrectos", Toast.LENGTH_SHORT).show();
+
+                                }
 
 
 
@@ -125,78 +198,10 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-
         queue.add(getRequest);
 
 
 
-    }
-
-
-
-
-
-    public void formulario(View view){
-
-
-
-        txtRut= findViewById(R.id.input_rut);
-        txtPassword= findViewById(R.id.input_contraseña);
-
-        String rut = txtRut.getText().toString();
-        String password = txtPassword.getText().toString();
-
-        Intent intent = new Intent(this, Formulario.class);
-
-
-        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Autenticando...");
-        progressDialog.show();
-
-
-        if (rut.isEmpty()) {
-
-            txtRut.setError("El Campo esta vacio");
-            txtRut.requestFocus();
-            progressDialog.dismiss();
-            return;
-        }else if (password.isEmpty()){
-
-            txtPassword.setError("El Campo esta vacio");
-            txtPassword.requestFocus();
-            progressDialog.dismiss();
-            return;
-
-        }else if (rut.equals("198153567")  &&password.equals("contraseña")){
-
-            startActivity(intent);
-            progressDialog.dismiss();
-
-            SharedPreferences sesion = getSharedPreferences(EmpresaDBContract.Sesion.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sesion.edit();
-
-            editor.putBoolean(EmpresaDBContract.Sesion.FIELD_SESSION, true);
-            editor.putString(EmpresaDBContract.Sesion.FIELD_USERNAME, rut);
-
-
-
-
-            editor.putString(EmpresaDBContract.Sesion.FIELD_ID, "1");
-
-
-
-
-            editor.commit();
-
-            finish();
-
-        }else{
-
-            progressDialog.dismiss();
-            Toast.makeText(getApplicationContext(), "Datos incorrectos", Toast.LENGTH_SHORT).show();
-
-        }
 
     }
 

@@ -42,6 +42,7 @@ import java.util.Date;
 
 public class Formulario extends AppCompatActivity {
 
+
     //Variables
     private EditText txtNombreEmpresa, txtDireccionEmpresa, txtRBDEmpresa, txtObservaciones;
     private Button btnGuardar, btnEnviar;
@@ -141,6 +142,7 @@ public class Formulario extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario);
+
 
 
         txtNombreEmpresa = findViewById(R.id.EditTextNombreEmpresa);
@@ -374,29 +376,38 @@ public class Formulario extends AppCompatActivity {
     }
 
 
+
+
     public void sendEmail(View view) {
 
 
 
+        if (TemplatePDF.archivoPDF.exists()) {
             String[] correo = {""};
             String[] CC = {""};
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
-            Uri uri = Uri.fromFile((new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/PDF/OrdenDeTrabajo.pdf")));
+            Uri uri2 = FileProvider.getUriForFile(Formulario.this, BuildConfig.APPLICATION_ID + ".provider", TemplatePDF.archivoPDF);
+
+            Uri uri = Uri.fromFile((new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/DCIM/PDF/OT_CyberPunk_Calle Falsa #123_20190405_153700.pdf")));
+
             emailIntent.setData(Uri.parse("mailto:"));
             emailIntent.setType("text/plain");
             emailIntent.putExtra(Intent.EXTRA_EMAIL, correo);
             emailIntent.putExtra(Intent.EXTRA_CC, CC);
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Orden de Trabajo");
             emailIntent.putExtra(Intent.EXTRA_TEXT, "");
-            emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            emailIntent.putExtra(Intent.EXTRA_STREAM, uri2);
 
             try {
-                startActivity(Intent.createChooser(emailIntent, "Enviar email..."));
+                startActivity(Intent.createChooser(emailIntent, "Enviar Orden de Trabajo"));
 
             } catch (android.content.ActivityNotFoundException ex) {
                 Toast.makeText(Formulario.this,
                         "No tienes clientes de email instalados.", Toast.LENGTH_SHORT).show();
             }
+        }else{
+            Toast.makeText(getApplicationContext(), "Debe crear el archivo primero", Toast.LENGTH_LONG).show();
+        }
 
     }
 
