@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 String rutA = o.getString("rut");
                                 String clave = o.getString("password");
+                                String pago= o.getString("pago");
 
 
 
@@ -148,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                                     progressDialog.dismiss();
                                     return;
 
-                                }else if (rut.equals("123456789")  &&password.equals(clave)){
+                                }else if (rut.equals(rutA)  &&password.equals(clave)&&pago.equals("1")){
 
                                     startActivity(intent);
                                     progressDialog.dismiss();
