@@ -188,6 +188,8 @@ public class Formulario extends AppCompatActivity {
     public void pdfApp(View view) throws IOException, DocumentException {
 
 
+
+
         //----------------Comprobacion---------------------
 
         //Comprobacion de campos
@@ -201,6 +203,8 @@ public class Formulario extends AppCompatActivity {
             txtDireccionEmpresa.requestFocus();
             return;
         }
+
+
 
         //Comprobacion de los RadioButton
         if (RadioControl.isChecked() == true) {
@@ -330,6 +334,8 @@ public class Formulario extends AppCompatActivity {
         templatePDF.addParagraph(txtObservaciones.getText().toString());
         templatePDF.closeDocument();
 
+
+
         EmpresaController controller = new EmpresaController(getApplicationContext());
 
 
@@ -354,13 +360,15 @@ public class Formulario extends AppCompatActivity {
 
 
 
+
         //Ver PDF
-        if (TemplatePDF.archivoPDF.exists()) {
+       if (TemplatePDF.archivoPDF.exists()) {
             Uri uri = FileProvider.getUriForFile(Formulario.this,BuildConfig.APPLICATION_ID+".provider",TemplatePDF.archivoPDF);
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.setDataAndType(uri, "application/pdf");
             try {
+
 
                 startActivity(intent);
 
@@ -372,6 +380,7 @@ public class Formulario extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "No se encontro el archivo", Toast.LENGTH_LONG).show();
         }
+
 
     }
 

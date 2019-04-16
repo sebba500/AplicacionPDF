@@ -111,6 +111,20 @@ public class MainActivity extends AppCompatActivity {
 
         final Intent intent = new Intent(this, Formulario.class);
 
+        if (rut.isEmpty()) {
+
+            txtRut.setError("El Campo esta vacio");
+            txtRut.requestFocus();
+
+            return;
+        }else if (password.isEmpty()){
+
+            txtPassword.setError("El Campo esta vacio");
+            txtPassword.requestFocus();
+
+            return;
+
+        }
 
         final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setIndeterminate(true);
@@ -136,20 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                                if (rut.isEmpty()) {
-
-                                    txtRut.setError("El Campo esta vacio");
-                                    txtRut.requestFocus();
-                                    progressDialog.dismiss();
-                                    return;
-                                }else if (password.isEmpty()){
-
-                                    txtPassword.setError("El Campo esta vacio");
-                                    txtPassword.requestFocus();
-                                    progressDialog.dismiss();
-                                    return;
-
-                                }else if (rut.equals(rutA)  &&password.equals(clave)&&pago.equals("1")){
+                                if (rut.equals(rutA)  &&password.equals(clave)&&pago.equals("1")){
 
                                     startActivity(intent);
                                     progressDialog.dismiss();

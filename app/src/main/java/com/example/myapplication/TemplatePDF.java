@@ -58,6 +58,8 @@ public class TemplatePDF extends AppCompatActivity {
     //METODO PARA ABRIR EL DOCUMENTO
     public void abrirDocumento() {
 
+
+
            crearPDF();
 
         try {
@@ -66,9 +68,12 @@ public class TemplatePDF extends AppCompatActivity {
             pdfWriter = PdfWriter.getInstance(documento, new FileOutputStream(archivoPDF));
             documento.open();
 
+
         } catch (Exception e) {
             Log.e("openDocument", e.toString());
+
         }
+
     }
 
     //METODO PARA CREAR EL DOCUMENTO
