@@ -94,7 +94,18 @@ public class Formulario extends AppCompatActivity {
     //----
     String Sanicitrex = "   ";
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
 
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -170,30 +181,30 @@ public class Formulario extends AppCompatActivity {
         RadioControl =  findViewById(R.id.RControl);
         //Checkboxs
         //---Primer----
-        CheckRBpe = (CheckBox) findViewById(R.id.RBpe);
-        CheckRBpi = (CheckBox) findViewById(R.id.RBpi);
-        CheckRBb = (CheckBox) findViewById(R.id.RBb);
+        CheckRBpe =findViewById(R.id.RBpe);
+        CheckRBpi =findViewById(R.id.RBpi);
+        CheckRBb =  findViewById(R.id.RBb);
         //----Segundo----
-        CheckRbext = (CheckBox) findViewById(R.id.RBext);
-        CheckRbint = (CheckBox) findViewById(R.id.RBint);
-        CheckRbbo = (CheckBox) findViewById(R.id.RBbo);
+        CheckRbext = findViewById(R.id.RBext);
+        CheckRbint =  findViewById(R.id.RBint);
+        CheckRbbo = findViewById(R.id.RBbo);
         //----tercero-----
-        CheckRbsha = (CheckBox) findViewById(R.id.RBsha);
-        CheckRbshc = (CheckBox) findViewById(R.id.RBshc);
-        CheckRbcamF = (CheckBox) findViewById(R.id.RBcamF);
+        CheckRbsha =  findViewById(R.id.RBsha);
+        CheckRbshc =  findViewById(R.id.RBshc);
+        CheckRbcamF =  findViewById(R.id.RBcamF);
         //-----Cuarto-----
-        CheckRbbroma = (CheckBox) findViewById(R.id.RBbroma);
-        CheckRbtrampa = (CheckBox) findViewById(R.id.RBtrampa);
-        CheckRbnotoxico = (CheckBox) findViewById(R.id.RBnotoxico);
+        CheckRbbroma =  findViewById(R.id.RBbroma);
+        CheckRbtrampa =  findViewById(R.id.RBtrampa);
+        CheckRbnotoxico =  findViewById(R.id.RBnotoxico);
         //---------Quinto---------
-        CheckRbcipermetrina = (CheckBox) findViewById(R.id.RBCipermetrina);
-        CheckRbdelta = (CheckBox) findViewById(R.id.RBDeltametrina);
-        CheckRbaguatrin = (CheckBox) findViewById(R.id.RBAquatrin);
-        CheckRbagita = (CheckBox) findViewById(R.id.RBAgita);
+        CheckRbcipermetrina = findViewById(R.id.RBCipermetrina);
+        CheckRbdelta =  findViewById(R.id.RBDeltametrina);
+        CheckRbaguatrin = findViewById(R.id.RBAquatrin);
+        CheckRbagita =  findViewById(R.id.RBAgita);
         //-----sexto-----
-        CheckRbsanicitrex = (CheckBox) findViewById(R.id.RBSanicitrex);
+        CheckRbsanicitrex = findViewById(R.id.RBSanicitrex);
 
-        txtObservaciones = (EditText) findViewById(R.id.EditTextObservacion);
+        txtObservaciones =  findViewById(R.id.EditTextObservacion);
 
 
     }//cerrar onCreate
@@ -507,6 +518,8 @@ public class Formulario extends AppCompatActivity {
 
         return rows;
     }
+
+
 
 
 }
