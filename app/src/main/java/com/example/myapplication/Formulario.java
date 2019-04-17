@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,12 +15,15 @@ import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDialogFragment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -29,13 +33,17 @@ import com.example.myapplication.model.EmpresaDBContract;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import static com.example.myapplication.FirmaActivity.firmaPNG;
 
 //import android.media.Image;
 
@@ -43,6 +51,7 @@ import java.util.Date;
 public class Formulario extends AppCompatActivity {
 
 
+    private static final Byte Base64 = null;
     //Variables
     private EditText txtNombreEmpresa, txtDireccionEmpresa, txtRBDEmpresa, txtObservaciones;
     private Button btnGuardar, btnEnviar;
@@ -56,6 +65,10 @@ public class Formulario extends AppCompatActivity {
     private String web = "www.antimouse.cl";
     private String[]header={"Control de Roedores","Control de Insectos","Control de Microorganismos"};
     private String[]header2={"Desratizacion","Desinsectacion","Sanitizacion"};
+
+
+
+
 
     //----
     String perimetroExt = " ";
@@ -89,6 +102,7 @@ public class Formulario extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_principal_salir, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -142,6 +156,7 @@ public class Formulario extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario);
+
 
 
 
@@ -297,11 +312,20 @@ public class Formulario extends AppCompatActivity {
 
         //Añadir imagen
         AssetManager mngr = getAssets();
+
         InputStream is = mngr.open("antimouse.png");
+
         Bitmap bmp = BitmapFactory.decodeStream(is);
+
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
         bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
         Image image = Image.getInstance(stream.toByteArray());
+
+
+
+
 
 
 
@@ -312,6 +336,25 @@ public class Formulario extends AppCompatActivity {
         templatePDF.addMetaData("OrdenDeTrabajo","OrdenDeTrabajo","Antimouse");
         //templatePDF.addContact(Cell,web);
         templatePDF.addImage(image);
+
+
+
+        Bitmap bitmap = BitmapFactory.decodeFile(firmaPNG.getAbsolutePath());
+
+
+        Log.v("log_tag", "IMAGEN: " + firmaPNG);
+        ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream1);
+        Image image1 = Image.getInstance(stream1.toByteArray());
+
+
+
+        templatePDF.addImage(image1);
+
+
+
+
+
         templatePDF.addTitles("ORDEN DE TRABAJO","N°000001");
         templatePDF.addParagraph("Nombre empresa: " + txtNombreEmpresa.getText().toString());
         templatePDF.addParagraph("Direccion empresa: " + txtDireccionEmpresa.getText().toString());
@@ -420,6 +463,16 @@ public class Formulario extends AppCompatActivity {
 
     }
 
+    public void pdfFirma(View view){
+
+
+        Intent intent = new Intent(Formulario.this, FirmaActivity.class);
+
+        startActivity(intent);
+
+
+    }
+
 
     private ArrayList<String[]> getFila1(){
         ArrayList<String[]>rows=new ArrayList<>();
@@ -454,7 +507,6 @@ public class Formulario extends AppCompatActivity {
 
         return rows;
     }
-
 
 
 }

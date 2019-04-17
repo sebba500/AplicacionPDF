@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     */
 
 
+
     private EditText txtRut, txtPassword;
 
     protected void onCreate(Bundle savedInstanceState) {
