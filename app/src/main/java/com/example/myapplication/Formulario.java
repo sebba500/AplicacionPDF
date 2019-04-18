@@ -67,6 +67,8 @@ public class Formulario extends AppCompatActivity {
     private String[]header2={"Desratizacion","Desinsectacion","Sanitizacion"};
 
 
+    private String nombre;
+    private static String nombreGuardado="";
 
 
 
@@ -94,18 +96,7 @@ public class Formulario extends AppCompatActivity {
     //----
     String Sanicitrex = "   ";
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
 
-
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -167,6 +158,11 @@ public class Formulario extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario);
+
+
+
+
+
 
 
 
@@ -350,17 +346,39 @@ public class Formulario extends AppCompatActivity {
 
 
 
-        Bitmap bitmap = BitmapFactory.decodeFile(firmaPNG.getAbsolutePath());
-
-
-        Log.v("log_tag", "IMAGEN: " + firmaPNG);
-        ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream1);
-        Image image1 = Image.getInstance(stream1.toByteArray());
 
 
 
-        templatePDF.addImage(image1);
+
+
+        if (FirmaActivity.firmaPNG!=null) {
+
+
+            Bitmap bitmap = BitmapFactory.decodeFile(firmaPNG.getAbsolutePath());
+
+
+                ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream1);
+                Image image1 = Image.getInstance(stream1.toByteArray());
+                templatePDF.addImage(image1);
+
+
+
+
+
+
+            }else
+        {
+            Toast.makeText(getApplicationContext(), "no hay firma", Toast.LENGTH_LONG).show();
+        }
+
+
+
+
+
+
+
+
 
 
 
@@ -387,6 +405,8 @@ public class Formulario extends AppCompatActivity {
         templatePDF.addParagraph("Observaciones");
         templatePDF.addParagraph(txtObservaciones.getText().toString());
         templatePDF.closeDocument();
+
+
 
 
 
@@ -438,6 +458,23 @@ public class Formulario extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        nombreGuardado = savedInstanceState.getString("nombreGuardado");
+
+
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+
+        outState.putString("nombreGuardado",nombreGuardado);
+    }
 
 
 
@@ -476,6 +513,7 @@ public class Formulario extends AppCompatActivity {
 
     public void pdfFirma(View view){
 
+        nombreGuardado=txtNombreEmpresa.getText().toString();
 
         Intent intent = new Intent(Formulario.this, FirmaActivity.class);
 
