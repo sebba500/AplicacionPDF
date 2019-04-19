@@ -60,7 +60,8 @@ public class TemplatePDF extends AppCompatActivity {
 
 
 
-           crearPDF();
+
+
 
         try {
 
@@ -162,6 +163,16 @@ public class TemplatePDF extends AppCompatActivity {
 
             image.setAlignment(Image.LEFT);
             image.scalePercent(50);
+            documento.add(image);
+        }catch (Exception e){}
+
+    }
+
+    public void addImage2(Image image){
+        try{
+
+            image.setAlignment(Image.LEFT);
+            image.scalePercent(20);
             documento.add(image);
         }catch (Exception e){}
 

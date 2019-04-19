@@ -44,11 +44,64 @@ public class FirmaActivity extends AppCompatActivity {
     String pic_name = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
     String StoredPath = DIRECTORY + pic_name + ".png";
 
+    //VARIABLES PASADAS POR LA ACTIVIDAD FORMULARIO PARA SER DEVUELTA
+    private String formularioNombre, formularioDireccion, formularioRBD, formularioObservaciones, formularioRadio;
+
+    //CHECKBOX
+    private String formularioPE,formularioPI,formularioBO;
+
+    private String formularioEX,formularioIN,formularioBO2;
+
+    private String formularioADM,formularioCAMARINES,formularioCAMF;
+
+    private String formularioBroma,formularioTrampa,formularioTox;
+
+    private String formularioCIPE,formularioDELTA,formularioAQUA,formularioAGITA;
+
+    private String formularioSANI;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firma);
 
+        Bundle extras = this.getIntent().getExtras();
+
+        if (extras!=null){
+
+
+            formularioNombre=extras.getString("KEY_NOMBRE");
+            formularioDireccion=extras.getString("KEY_DIRECCION");
+            formularioRBD=extras.getString("KEY_RBD");
+            formularioObservaciones=extras.getString("KEY_OBSERVACIONES");
+            formularioRadio=extras.getString("KEY_RADIO");
+
+            formularioPE=extras.getString("KEY_PERIMETROEX");
+            formularioPI=extras.getString("KEY_PERIMETROIN");
+            formularioBO=extras.getString("KEY_BODEGAS");
+
+            formularioEX=extras.getString("KEY_EXTERIOR");
+            formularioIN=extras.getString("KEY_INTERIOR");
+            formularioBO2=extras.getString("KEY_BODEGAS2");
+
+            formularioADM=extras.getString("KEY_ADM");
+            formularioCAMARINES=extras.getString("KEY_CAMARINES");
+            formularioCAMF=extras.getString("KEY_CAMF");
+
+            formularioBroma=extras.getString("KEY_BROMA");
+            formularioTrampa=extras.getString("KEY_TRAMPA");
+            formularioTox=extras.getString("KEY_TOX");
+
+            formularioCIPE=extras.getString("KEY_CIPE");
+            formularioDELTA=extras.getString("KEY_DELTA");
+            formularioAQUA=extras.getString("KEY_AQUA");
+            formularioAGITA=extras.getString("KEY_AGITA");
+
+            formularioSANI=extras.getString("KEY_SANI");
+
+
+        }
 
 
         canvasLL = (LinearLayout) findViewById(R.id.canvasLL);
@@ -86,7 +139,39 @@ public class FirmaActivity extends AppCompatActivity {
 
                 firmaPNG = new File(DIRECTORY,pic_name+".png");
 
-                Log.v("log_tag", "DIRECTORIO: " + firmaPNG);
+
+                Bundle bundle =new Bundle();
+                bundle.putString("KEY_NOMBRE",formularioNombre);
+                bundle.putString("KEY_DIRECCION",formularioDireccion);
+                bundle.putString("KEY_RBD",formularioRBD);
+                bundle.putString("KEY_OBSERVACIONES",formularioObservaciones);
+
+                bundle.putString("KEY_RADIO",formularioRadio);
+
+                bundle.putString("KEY_PERIMETROEX",formularioPE);
+                bundle.putString("KEY_PERIMETROIN",formularioPI);
+                bundle.putString("KEY_BODEGAS",formularioBO);
+
+                bundle.putString("KEY_EXTERIOR",formularioEX);
+                bundle.putString("KEY_INTERIOR",formularioIN);
+                bundle.putString("KEY_BODEGAS2",formularioBO2);
+
+                bundle.putString("KEY_ADM",formularioADM);
+                bundle.putString("KEY_CAMARINES",formularioCAMARINES);
+                bundle.putString("KEY_CAMF",formularioCAMF);
+
+                bundle.putString("KEY_BROMA",formularioBroma);
+                bundle.putString("KEY_TRAMPA",formularioTrampa);
+                bundle.putString("KEY_TOX",formularioTox);
+
+                bundle.putString("KEY_CIPE",formularioCIPE);
+                bundle.putString("KEY_DELTA",formularioDELTA);
+                bundle.putString("KEY_AQUA",formularioAQUA);
+                bundle.putString("KEY_AGITA",formularioAGITA);
+
+                bundle.putString("KEY_SANI",formularioSANI);
+
+                intent.putExtras(bundle);
 
                 startActivity(intent);
 

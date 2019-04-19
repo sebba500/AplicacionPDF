@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.myapplication.controller.EmpresaController;
 import com.example.myapplication.model.EmpresaDBContract;
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 
@@ -67,8 +69,24 @@ public class Formulario extends AppCompatActivity {
     private String[]header2={"Desratizacion","Desinsectacion","Sanitizacion"};
 
 
-    private String nombre;
-    private static String nombreGuardado="";
+    //VARIABLES QUE RECIBEN DE FIRMA PARA MANTENER FORMULARIO
+    private String nombreVuelta, direccionVuelta, RBDVuelta, observacionesVuelta;
+    //RADIO BUTTON
+    private String radioVuelta;
+    //CHECKBOX CONTROL DE RODEDORES
+    private String perimetroExtVuelta,perimetroIntVuelta,bodegasVuelta;
+    //CHECKBOX CONTROL DE INSECTOS
+    private String exteriorVuelta,interiorVuelta,bodegas2Vuelta;
+    //CHECKBOX CONTROL DE MICROORGANISMOS
+    private String admVuelta,camarinesVuelta,camFVuelta;
+    //CHECKBOX DESRATIZACION
+    private String bromaVuelta,trampaVuelta,toxVuelta;
+    //CHECKBOX DESINSECTACION
+    private String cipeVuelta,deltaVuelta,aquaVuelta,agitaVuelta;
+    //CKECKBOX SANITIZACION
+    private String saniVuelta;
+
+
 
 
 
@@ -161,6 +179,7 @@ public class Formulario extends AppCompatActivity {
 
 
 
+        
 
 
 
@@ -203,6 +222,75 @@ public class Formulario extends AppCompatActivity {
         txtObservaciones =  findViewById(R.id.EditTextObservacion);
 
 
+        Bundle extras = this.getIntent().getExtras();
+
+        if (extras!=null){
+
+            nombreVuelta=extras.getString("KEY_NOMBRE");
+            direccionVuelta=extras.getString("KEY_DIRECCION");
+            RBDVuelta=extras.getString("KEY_RBD");
+            observacionesVuelta=extras.getString("KEY_OBSERVACIONES");
+
+            radioVuelta=extras.getString("KEY_RADIO");
+
+            perimetroExtVuelta=extras.getString("KEY_PERIMETROEX");
+            perimetroIntVuelta=extras.getString("KEY_PERIMETROIN");
+            bodegasVuelta=extras.getString("KEY_BODEGAS");
+
+            exteriorVuelta=extras.getString("KEY_EXTERIOR");
+            interiorVuelta=extras.getString("KEY_INTERIOR");
+            bodegas2Vuelta=extras.getString("KEY_BODEGAS2");
+
+            admVuelta=extras.getString("KEY_ADM");
+            camarinesVuelta=extras.getString("KEY_CAMARINES");
+            camFVuelta=extras.getString("KEY_CAMF");
+
+            bromaVuelta=extras.getString("KEY_BROMA");
+            trampaVuelta=extras.getString("KEY_TRAMPA");
+            toxVuelta=extras.getString("KEY_TOX");
+
+            cipeVuelta=extras.getString("KEY_CIPE");
+            deltaVuelta=extras.getString("KEY_DELTA");
+            aquaVuelta=extras.getString("KEY_AQUA");
+            agitaVuelta=extras.getString("KEY_AGITA");
+
+            saniVuelta=extras.getString("KEY_SANI");
+
+
+
+            txtNombreEmpresa.setText(nombreVuelta);
+            txtDireccionEmpresa.setText(direccionVuelta);
+            txtRBDEmpresa.setText(RBDVuelta);
+            txtObservaciones.setText(observacionesVuelta);
+
+            if (radioVuelta.equals("radio1")){ RadioServicio.setChecked(true); }
+            if (radioVuelta.equals("radio2")){ RadioControl.setChecked(true); }
+
+            if (perimetroExtVuelta.equals("checked")){CheckRBpe.setChecked(true); }
+            if (perimetroIntVuelta.equals("checked")){CheckRBpi.setChecked(true); }
+            if (bodegasVuelta.equals("checked")){CheckRBb.setChecked(true); }
+
+            if (exteriorVuelta.equals("checked")){CheckRbext.setChecked(true); }
+            if (interiorVuelta.equals("checked")){CheckRbint.setChecked(true); }
+            if (bodegas2Vuelta.equals("checked")){CheckRbbo.setChecked(true); }
+
+            if (admVuelta.equals("checked")){CheckRbsha.setChecked(true); }
+            if (camarinesVuelta.equals("checked")){CheckRbshc.setChecked(true); }
+            if (camFVuelta.equals("checked")){CheckRbcamF.setChecked(true); }
+
+            if (bromaVuelta.equals("checked")){CheckRbbroma.setChecked(true); }
+            if (trampaVuelta.equals("checked")){CheckRbtrampa.setChecked(true); }
+            if (toxVuelta.equals("checked")){CheckRbnotoxico.setChecked(true); }
+
+            if (cipeVuelta.equals("checked")){CheckRbcipermetrina.setChecked(true); }
+            if (deltaVuelta.equals("checked")){CheckRbdelta.setChecked(true); }
+            if (aquaVuelta.equals("checked")){CheckRbaguatrin.setChecked(true); }
+            if (agitaVuelta.equals("checked")){CheckRbagita.setChecked(true); }
+
+            if (saniVuelta.equals("checked")){CheckRbsanicitrex.setChecked(true); }
+
+
+        }
     }//cerrar onCreate
 
 
@@ -234,12 +322,11 @@ public class Formulario extends AppCompatActivity {
         } else if (RadioServicio.isChecked() == true) {
             TipoServicio = "Servicio";
         } if (RGroup.getCheckedRadioButtonId() == -1){
+
             Toast.makeText(this ,"Debe marcar un tipo de servicio",Toast.LENGTH_LONG).show();
 
             RGroup.requestFocus();
             return;
-        }else {
-
         }
 
 
@@ -310,83 +397,65 @@ public class Formulario extends AppCompatActivity {
         //------------------------Fin de comprobacion----------------------------
 
 
-        //Capturando Fecha y Hora
-        Date date = new Date() ;
-        String timeStamp = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(date);
-        final TemplatePDF templatePDF = new TemplatePDF(getApplicationContext());
+
+        if (FirmaActivity.firmaPNG==null){
 
 
 
-        //Añadir imagen
-        AssetManager mngr = getAssets();
+            final AlertDialog.Builder alerta=new AlertDialog.Builder(this);
+            alerta.setMessage("Crear documento sin firma?");
+            alerta.setTitle("Guardar documento");
+            alerta.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-        InputStream is = mngr.open("antimouse.png");
-
-        Bitmap bmp = BitmapFactory.decodeStream(is);
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
-        Image image = Image.getInstance(stream.toByteArray());
-
+                    //Capturando Fecha y Hora
+                    Date date = new Date() ;
+                    String timeStamp = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(date);
+                    final TemplatePDF templatePDF = new TemplatePDF(getApplicationContext());
 
 
 
+                    //Añadir imagen
+                    AssetManager mngr = getAssets();
+
+                    InputStream is = null;
+                    try {
+                        is = mngr.open("antimouse.png");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    Bitmap bmp = BitmapFactory.decodeStream(is);
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+                    Image image = null;
+                    try {
+                        image = Image.getInstance(stream.toByteArray());
+                    } catch (BadElementException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
 
+                    templatePDF.crearPDF();
 
-
-
-
-        templatePDF.abrirDocumento();
-        templatePDF.addMetaData("OrdenDeTrabajo","OrdenDeTrabajo","Antimouse");
-        //templatePDF.addContact(Cell,web);
-        templatePDF.addImage(image);
-
-
-
-
-
-
-
-
-        if (FirmaActivity.firmaPNG!=null) {
-
-
-            Bitmap bitmap = BitmapFactory.decodeFile(firmaPNG.getAbsolutePath());
-
-
-                ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream1);
-                Image image1 = Image.getInstance(stream1.toByteArray());
-                templatePDF.addImage(image1);
-
-
-
-
-
-
-            }else
-        {
-            Toast.makeText(getApplicationContext(), "no hay firma", Toast.LENGTH_LONG).show();
-        }
+                    templatePDF.abrirDocumento();
+                    templatePDF.addMetaData("OrdenDeTrabajo","OrdenDeTrabajo","Antimouse");
+                    //templatePDF.addContact(Cell,web);
+                    templatePDF.addImage(image);
 
 
 
 
 
-
-
-
-
-
-
-
-
-        templatePDF.addTitles("ORDEN DE TRABAJO","N°000001");
-        templatePDF.addParagraph("Nombre empresa: " + txtNombreEmpresa.getText().toString());
-        templatePDF.addParagraph("Direccion empresa: " + txtDireccionEmpresa.getText().toString());
+                    templatePDF.addTitles("ORDEN DE TRABAJO","N°000001");
+                    templatePDF.addParagraph("Nombre empresa: " + txtNombreEmpresa.getText().toString());
+                    templatePDF.addParagraph("Direccion empresa: " + txtDireccionEmpresa.getText().toString());
 
 
         /*
@@ -394,23 +463,23 @@ public class Formulario extends AppCompatActivity {
            |            poner servicio y RBD                                    |
            ----------------------------------------------------------------------
          */
-        templatePDF.addParagraph("Fecha: "+ timeStamp);
-        templatePDF.addParagraph("RBD: "+ txtRBDEmpresa.getText().toString());
+                    templatePDF.addParagraph("Fecha: "+ timeStamp);
+                    templatePDF.addParagraph("RBD: "+ txtRBDEmpresa.getText().toString());
 
 
-        templatePDF.createTable(header,getFila1());
-        templatePDF.createTable(header2,getFila2());
+                    templatePDF.createTable(header,getFila1());
+                    templatePDF.createTable(header2,getFila2());
 
-        templatePDF.addParagraph("\n");
-        templatePDF.addParagraph("Observaciones");
-        templatePDF.addParagraph(txtObservaciones.getText().toString());
-        templatePDF.closeDocument();
-
-
+                    templatePDF.addParagraph("\n");
+                    templatePDF.addParagraph("Observaciones");
+                    templatePDF.addParagraph(txtObservaciones.getText().toString());
+                    templatePDF.closeDocument();
 
 
 
-        EmpresaController controller = new EmpresaController(getApplicationContext());
+
+
+                    EmpresaController controller = new EmpresaController(getApplicationContext());
 
 
        /* if (controller.existeono(txtNombreEmpresa.getText().toString())) {
@@ -435,45 +504,179 @@ public class Formulario extends AppCompatActivity {
 
 
 
-        //Ver PDF
-       if (TemplatePDF.archivoPDF.exists()) {
-            Uri uri = FileProvider.getUriForFile(Formulario.this,BuildConfig.APPLICATION_ID+".provider",TemplatePDF.archivoPDF);
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.setDataAndType(uri, "application/pdf");
+                    //Ver PDF
+                    if (TemplatePDF.archivoPDF.exists()) {
+                        Uri uri = FileProvider.getUriForFile(Formulario.this,BuildConfig.APPLICATION_ID+".provider",TemplatePDF.archivoPDF);
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        intent.setDataAndType(uri, "application/pdf");
+                        try {
+
+
+                            startActivity(intent);
+
+
+                        } catch (ActivityNotFoundException e) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.adobe.reader")));
+                            Toast.makeText(getApplicationContext(), "No cuentas con una aplicacion para visualizar pdf", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "No se encontro el archivo", Toast.LENGTH_LONG).show();
+                    }
+
+
+                }
+            });
+            alerta.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            AlertDialog dialog=alerta.create();
+            dialog.show();
+
+            //Capturando Fecha y Hora
+
+
+
+        }else{
+
+            Date date = new Date() ;
+            String timeStamp = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(date);
+            final TemplatePDF templatePDF = new TemplatePDF(getApplicationContext());
+
+
+
+            //Añadir imagen LOGO
+            AssetManager mngr = getAssets();
+            InputStream is = mngr.open("antimouse.png");
+            Bitmap bmp = BitmapFactory.decodeStream(is);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            Image image = Image.getInstance(stream.toByteArray());
+
+
+
+
+
+            //Añadir imagen FIRMA
+            Bitmap bitmap = BitmapFactory.decodeFile(firmaPNG.getAbsolutePath());
+            ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream1);
+            Image firma = Image.getInstance(stream1.toByteArray());
+
+
+
+
+
+            templatePDF.crearPDF();
+
+            templatePDF.abrirDocumento();
+            templatePDF.addMetaData("OrdenDeTrabajo","OrdenDeTrabajo","Antimouse");
+            //templatePDF.addContact(Cell,web);
+            templatePDF.addImage(image);
+
+            templatePDF.addTitles("ORDEN DE TRABAJO","N°000001");
+            templatePDF.addParagraph("Nombre empresa: " + txtNombreEmpresa.getText().toString());
+            templatePDF.addParagraph("Direccion empresa: " + txtDireccionEmpresa.getText().toString());
+
+
+        /*
+           ----------------------------------------------------------------------
+           |            poner servicio y RBD                                    |
+           ----------------------------------------------------------------------
+         */
+            templatePDF.addParagraph("Fecha: "+ timeStamp);
+            templatePDF.addParagraph("RBD: "+ txtRBDEmpresa.getText().toString());
+
+
+            templatePDF.createTable(header,getFila1());
+            templatePDF.createTable(header2,getFila2());
+
+            templatePDF.addParagraph("\n");
+            templatePDF.addParagraph("Observaciones");
+            templatePDF.addParagraph(txtObservaciones.getText().toString());
+            templatePDF.addImage2(firma);
+            templatePDF.closeDocument();
+
+
+
+
+
+            EmpresaController controller = new EmpresaController(getApplicationContext());
+
+
+       /* if (controller.existeono(txtNombreEmpresa.getText().toString())) {
+
+
             try {
+                controller.crearEmpresa(txtNombreEmpresa.getText().toString(), txtDireccionEmpresa.getText().toString(), txtRBDEmpresa.getText().toString());
+                Toast.makeText(getApplicationContext(), "creado", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                e.printStackTrace();
 
 
-                startActivity(intent);
 
-
-            } catch (ActivityNotFoundException e) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.adobe.reader")));
-                Toast.makeText(getApplicationContext(), "No cuentas con una aplicacion para visualizar pdf", Toast.LENGTH_LONG).show();
             }
-        } else {
-            Toast.makeText(getApplicationContext(), "No se encontro el archivo", Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(getApplicationContext(), "ya existe", Toast.LENGTH_LONG).show();
+
+        }
+
+       */
+
+
+
+
+            //Ver PDF
+            if (TemplatePDF.archivoPDF.exists()) {
+                Uri uri = FileProvider.getUriForFile(Formulario.this,BuildConfig.APPLICATION_ID+".provider",TemplatePDF.archivoPDF);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.setDataAndType(uri, "application/pdf");
+                try {
+
+
+                    startActivity(intent);
+
+
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.adobe.reader")));
+                    Toast.makeText(getApplicationContext(), "No cuentas con una aplicacion para visualizar pdf", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "No se encontro el archivo", Toast.LENGTH_LONG).show();
+            }
+
         }
 
 
     }
 
+
+
+
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        nombreGuardado = savedInstanceState.getString("nombreGuardado");
+
 
 
 
     }
+
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
 
-        outState.putString("nombreGuardado",nombreGuardado);
+
     }
 
 
@@ -482,7 +685,7 @@ public class Formulario extends AppCompatActivity {
 
 
 
-        if (TemplatePDF.archivoPDF.exists()) {
+        if (TemplatePDF.archivoPDF!=null) {
             String[] correo = {""};
             String[] CC = {""};
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
@@ -513,9 +716,88 @@ public class Formulario extends AppCompatActivity {
 
     public void pdfFirma(View view){
 
-        nombreGuardado=txtNombreEmpresa.getText().toString();
+
 
         Intent intent = new Intent(Formulario.this, FirmaActivity.class);
+
+        String rbstring = "";
+        String perimetroExt="",perimetroInt="",bodegas="";
+        String exterior="",interior="",bodegas2="";
+        String adm="",camarines="",camF="";
+        String broma="",trampa="",tox="";
+        String cipe="",delta="",aqua="",agita="";
+        String sani="";
+
+
+
+
+
+
+
+         if (RadioServicio.isChecked()){ rbstring = "radio1";}
+         if (RadioControl.isChecked()){ rbstring="radio2";}
+
+         if (CheckRBpe.isChecked()){ perimetroExt="checked"; }
+         if (CheckRBpi.isChecked()){ perimetroInt="checked"; }
+         if (CheckRBb.isChecked()){ bodegas="checked"; }
+
+        if (CheckRbext.isChecked()){ exterior="checked"; }
+        if (CheckRbint.isChecked()){ interior="checked"; }
+        if (CheckRbbo.isChecked()){ bodegas2="checked"; }
+
+        if (CheckRbsha.isChecked()){ adm="checked"; }
+        if (CheckRbshc.isChecked()){ camarines="checked"; }
+        if (CheckRbcamF.isChecked()){ camF="checked"; }
+
+        if (CheckRbbroma.isChecked()){ broma="checked"; }
+        if (CheckRbtrampa.isChecked()){ trampa="checked"; }
+        if (CheckRbnotoxico.isChecked()){ tox="checked"; }
+
+        if (CheckRbcipermetrina.isChecked()){ cipe="checked"; }
+        if (CheckRbdelta.isChecked()){ delta="checked"; }
+        if (CheckRbaguatrin.isChecked()){ aqua="checked"; }
+        if (CheckRbagita.isChecked()){ agita="checked"; }
+
+        if (CheckRbsanicitrex.isChecked()){ sani="checked"; }
+
+
+
+
+
+
+        Bundle bundle =new Bundle();
+        bundle.putString("KEY_NOMBRE",txtNombreEmpresa.getText().toString());
+        bundle.putString("KEY_DIRECCION",txtDireccionEmpresa.getText().toString());
+        bundle.putString("KEY_RBD",txtRBDEmpresa.getText().toString());
+        bundle.putString("KEY_OBSERVACIONES",txtObservaciones.getText().toString());
+
+        bundle.putString("KEY_RADIO",rbstring);
+
+        bundle.putString("KEY_PERIMETROEX",perimetroExt);
+        bundle.putString("KEY_PERIMETROIN",perimetroInt);
+        bundle.putString("KEY_BODEGAS",bodegas);
+
+        bundle.putString("KEY_EXTERIOR",exterior);
+        bundle.putString("KEY_INTERIOR",interior);
+        bundle.putString("KEY_BODEGAS2",bodegas2);
+
+        bundle.putString("KEY_ADM",adm);
+        bundle.putString("KEY_CAMARINES",camarines);
+        bundle.putString("KEY_CAMF",camF);
+
+        bundle.putString("KEY_BROMA",broma);
+        bundle.putString("KEY_TRAMPA",trampa);
+        bundle.putString("KEY_TOX",tox);
+
+        bundle.putString("KEY_CIPE",cipe);
+        bundle.putString("KEY_DELTA",delta);
+        bundle.putString("KEY_AQUA",aqua);
+        bundle.putString("KEY_AGITA",agita);
+
+        bundle.putString("KEY_SANI",sani);
+
+
+        intent.putExtras(bundle);
 
         startActivity(intent);
 

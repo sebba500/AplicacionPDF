@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    private String rutA,clave,pago;
     private EditText txtRut, txtPassword;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void formulario(View view){
 
-        final String url = "https://cybertechnologiapiapk2.000webhostapp.com/api/empresa";
+        final String url = "http://cybertechnology.online/api/empresa";
 
         final RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -144,14 +145,14 @@ public class MainActivity extends AppCompatActivity {
 
                                 JSONObject o = json.getJSONObject(i);
 
-                                String rutA = o.getString("rut");
-                                String clave = o.getString("password");
-                                String pago= o.getString("pago");
+                                 rutA = o.getString("rut");
+                                 clave = o.getString("password");
+                                 pago= o.getString("pago");
 
 
 
 
-                                if (rut.equals(rutA)  &&password.equals(clave)&&pago.equals("1")){
+                                if (rut.equals(rutA) &&password.equals(clave)&& pago.equals("1")){
 
                                     startActivity(intent);
                                     progressDialog.dismiss();
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     finish();
 
-                                }else{
+                                } else if (!rut.equals(rutA) || !password.equals(clave)){
 
                                     progressDialog.dismiss();
                                     Toast.makeText(getApplicationContext(), "Datos incorrectos", Toast.LENGTH_SHORT).show();
@@ -184,6 +185,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                             }
+
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -202,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         queue.add(getRequest);
+
 
 
 
