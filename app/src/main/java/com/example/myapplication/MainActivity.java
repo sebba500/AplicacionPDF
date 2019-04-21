@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -16,12 +18,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.myapplication.controller.EmpresaController;
 import com.example.myapplication.model.EmpresaDBContract;
 
 import org.json.JSONArray;
@@ -44,8 +53,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private String rutA,clave,pago;
+
     private EditText txtRut, txtPassword;
+
+
+
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -86,6 +98,18 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        EmpresaController controller = new EmpresaController(getApplicationContext());
+        try {
+            controller.eliminarRegistros();
+
+            Log.d("BORRADO ", null);
+
+        } catch (Exception e) {
+
+            String mensaje = e.getMessage();
+            Log.d("NO BORRADO", mensaje);
+
+        }
 
 
 
@@ -133,6 +157,14 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setMessage("Autenticando...");
         progressDialog.show();
 
+
+
+        if(!hayInternet()){
+            progressDialog.dismiss();
+
+            Toast.makeText(getApplicationContext(), "No hay conexión con el servidor", Toast.LENGTH_SHORT).show();
+        }
+
         final JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -145,42 +177,25 @@ public class MainActivity extends AppCompatActivity {
 
                                 JSONObject o = json.getJSONObject(i);
 
-                                 rutA = o.getString("rut");
-                                 clave = o.getString("password");
-                                 pago= o.getString("pago");
+                                 String idEmpresa=o.getString("id");
+                                 String rutA = o.getString("rut");
+                                 String nombre=o.getString("nombre");
+                                 String clave = o.getString("password");
+                                 String pago= o.getString("pago");
+                                 String correlativo=o.getString("correlativo");
 
 
 
-
-                                if (rut.equals(rutA) &&password.equals(clave)&& pago.equals("1")){
-
-                                    startActivity(intent);
-                                    progressDialog.dismiss();
-
-                                    SharedPreferences sesion = getSharedPreferences(EmpresaDBContract.Sesion.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sesion.edit();
-
-                                    editor.putBoolean(EmpresaDBContract.Sesion.FIELD_SESSION, true);
-                                    editor.putString(EmpresaDBContract.Sesion.FIELD_USERNAME, rut);
-
-
-
-
-                                    editor.putString(EmpresaDBContract.Sesion.FIELD_ID, "1");
-
-
-
-
-                                    editor.commit();
-
-                                    finish();
-
-                                } else if (!rut.equals(rutA) || !password.equals(clave)){
-
-                                    progressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(), "Datos incorrectos", Toast.LENGTH_SHORT).show();
-
+                                try {
+                                    EmpresaController controller = new EmpresaController(getApplicationContext());
+                                    controller.crearEmpresa(Integer.parseInt(idEmpresa), rutA, nombre, clave, pago,correlativo);
+                                    Log.d("CREADO USUARIO", null);
+                                } catch (Exception e) {
+                                    String mensaje = e.getMessage();
+                                    Log.d("NO CREADO", mensaje);
                                 }
+
+
 
 
 
@@ -189,6 +204,45 @@ public class MainActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                        }
+
+                        String rut = txtRut.getText().toString();
+                        String password = txtPassword.getText().toString();
+
+                        EmpresaController controller = new EmpresaController(getApplicationContext());
+
+
+
+                         if (controller.usuarioLogin(rut, password)) {
+
+
+                            Intent intent = new Intent(MainActivity.this, Formulario.class);
+
+                            progressDialog.dismiss();
+                            startActivity(intent);
+
+                            SharedPreferences sesion = getSharedPreferences(EmpresaDBContract.Sesion.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sesion.edit();
+
+                            editor.putBoolean(EmpresaDBContract.Sesion.FIELD_SESSION, true);
+                            editor.putString(EmpresaDBContract.Sesion.FIELD_USERNAME, rut);
+
+                            editor.putString(EmpresaDBContract.Sesion.FIELD_ID, controller.obtenerIDusuario(rut));
+
+                            editor.putString(EmpresaDBContract.Sesion.FIELD_PAGO, controller.obtenerPAGOusuario(rut));
+                            editor.putString(EmpresaDBContract.Sesion.FIELD_CORRELATIVO, controller.obtenerCORRELATIVOusuario(rut));
+
+
+                            editor.apply();
+
+                            finish();
+
+
+
+
+                        } else {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Datos incorrectos", Toast.LENGTH_SHORT).show();
                         }
 
                         Log.d("Response", response.toString());
@@ -212,7 +266,30 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    private boolean hayInternet(){
+        boolean hayWIFI=false;
+        boolean hayDATOS=false;
+
+        ConnectivityManager connectivityManager= (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos=connectivityManager.getAllNetworkInfo();
+
+        for (NetworkInfo info:networkInfos)
+        {
+            if (info.getTypeName().equalsIgnoreCase("WIFI"))
+                if (info.isConnected())
+                hayWIFI=true;
+            if (info.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (info.isConnected())
+                hayDATOS=true;
+        }
+        return hayDATOS || hayWIFI;
+    }
+
+
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1 ;
 
 
 }
+
+

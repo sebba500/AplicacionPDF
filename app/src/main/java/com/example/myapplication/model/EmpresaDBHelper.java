@@ -11,9 +11,11 @@ public class EmpresaDBHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + EmpresaDBContract.EmpresaTabla.TABLE_NAME +
                     "(" + EmpresaDBContract.EmpresaTabla._ID + " INTEGER PRIMARY KEY," +
+                    EmpresaDBContract.EmpresaTabla.COLUMN_NAME_RUT + " TEXT," +
                     EmpresaDBContract.EmpresaTabla.COLUMN_NAME_NOMBRE + " TEXT," +
-                    EmpresaDBContract.EmpresaTabla.COLUMN_NAME_DIRECCION + " TEXT," +
-                    EmpresaDBContract.EmpresaTabla.COLUMN_NAME_RBD + " TEXT)";
+                    EmpresaDBContract.EmpresaTabla.COLUMN_NAME_PASSWORD + " TEXT," +
+                    EmpresaDBContract.EmpresaTabla.COLUMN_NAME_PAGO + " TEXT," +
+                    EmpresaDBContract.EmpresaTabla.COLUMN_NAME_CORRELATIVO + " TEXT)";
 
     public EmpresaDBHelper(Context context){ super(context,DATABASE_NAME, null,DATABASE_VERSION);}
 
