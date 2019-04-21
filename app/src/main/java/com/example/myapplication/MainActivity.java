@@ -163,102 +163,96 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.dismiss();
 
             Toast.makeText(getApplicationContext(), "No hay conexión con el servidor", Toast.LENGTH_SHORT).show();
-        }
+        }else if (hayInternet()){
 
-        final JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
+            final JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
 
-                        String array = response.toString();
-                        try {
-                            JSONArray json = new JSONArray(array);
-                            for (int i = 0; i < json.length(); i++) {
+                            String array = response.toString();
+                            try {
+                                JSONArray json = new JSONArray(array);
+                                for (int i = 0; i < json.length(); i++) {
 
-                                JSONObject o = json.getJSONObject(i);
+                                    JSONObject o = json.getJSONObject(i);
 
-                                 String idEmpresa=o.getString("id");
-                                 String rutA = o.getString("rut");
-                                 String nombre=o.getString("nombre");
-                                 String clave = o.getString("password");
-                                 String pago= o.getString("pago");
-                                 String correlativo=o.getString("correlativo");
+                                    String idEmpresa = o.getString("id");
+                                    String rutA = o.getString("rut");
+                                    String nombre = o.getString("nombre");
+                                    String clave = o.getString("password");
+                                    String pago = o.getString("pago");
+                                    String correlativo = o.getString("correlativo");
 
 
+                                    try {
+                                        EmpresaController controller = new EmpresaController(getApplicationContext());
+                                        controller.crearEmpresa(Integer.parseInt(idEmpresa), rutA, nombre, clave, pago, correlativo);
+                                        Log.d("CREADO USUARIO", null);
+                                    } catch (Exception e) {
+                                        String mensaje = e.getMessage();
+                                        Log.d("NO CREADO", mensaje);
+                                    }
 
-                                try {
-                                    EmpresaController controller = new EmpresaController(getApplicationContext());
-                                    controller.crearEmpresa(Integer.parseInt(idEmpresa), rutA, nombre, clave, pago,correlativo);
-                                    Log.d("CREADO USUARIO", null);
-                                } catch (Exception e) {
-                                    String mensaje = e.getMessage();
-                                    Log.d("NO CREADO", mensaje);
+
                                 }
 
 
-
-
-
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
 
+                            String rut = txtRut.getText().toString();
+                            String password = txtPassword.getText().toString();
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            EmpresaController controller = new EmpresaController(getApplicationContext());
+
+
+                            if (controller.usuarioLogin(rut, password)) {
+
+
+                                Intent intent = new Intent(MainActivity.this, Formulario.class);
+
+                                progressDialog.dismiss();
+                                startActivity(intent);
+
+                                SharedPreferences sesion = getSharedPreferences(EmpresaDBContract.Sesion.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sesion.edit();
+
+                                editor.putBoolean(EmpresaDBContract.Sesion.FIELD_SESSION, true);
+                                editor.putString(EmpresaDBContract.Sesion.FIELD_USERNAME, rut);
+
+                                editor.putString(EmpresaDBContract.Sesion.FIELD_ID, controller.obtenerIDusuario(rut));
+
+                                editor.putString(EmpresaDBContract.Sesion.FIELD_PAGO, controller.obtenerPAGOusuario(rut));
+                                editor.putString(EmpresaDBContract.Sesion.FIELD_CORRELATIVO, controller.obtenerCORRELATIVOusuario(rut));
+
+
+                                editor.apply();
+
+                                finish();
+
+
+                            } else {
+                                progressDialog.dismiss();
+                                Toast.makeText(getApplicationContext(), "Datos incorrectos", Toast.LENGTH_SHORT).show();
+                            }
+
+                            Log.d("Response", response.toString());
+
                         }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("Error.Response", error.toString());
 
-                        String rut = txtRut.getText().toString();
-                        String password = txtPassword.getText().toString();
-
-                        EmpresaController controller = new EmpresaController(getApplicationContext());
-
-
-
-                         if (controller.usuarioLogin(rut, password)) {
-
-
-                            Intent intent = new Intent(MainActivity.this, Formulario.class);
-
-                            progressDialog.dismiss();
-                            startActivity(intent);
-
-                            SharedPreferences sesion = getSharedPreferences(EmpresaDBContract.Sesion.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sesion.edit();
-
-                            editor.putBoolean(EmpresaDBContract.Sesion.FIELD_SESSION, true);
-                            editor.putString(EmpresaDBContract.Sesion.FIELD_USERNAME, rut);
-
-                            editor.putString(EmpresaDBContract.Sesion.FIELD_ID, controller.obtenerIDusuario(rut));
-
-                            editor.putString(EmpresaDBContract.Sesion.FIELD_PAGO, controller.obtenerPAGOusuario(rut));
-                            editor.putString(EmpresaDBContract.Sesion.FIELD_CORRELATIVO, controller.obtenerCORRELATIVOusuario(rut));
-
-
-                            editor.apply();
-
-                            finish();
-
-
-
-
-                        } else {
-                            progressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Datos incorrectos", Toast.LENGTH_SHORT).show();
                         }
-
-                        Log.d("Response", response.toString());
-
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", error.toString());
+            );
+            queue.add(getRequest);
+        }
 
-                    }
-                }
-        );
-
-        queue.add(getRequest);
 
 
 
