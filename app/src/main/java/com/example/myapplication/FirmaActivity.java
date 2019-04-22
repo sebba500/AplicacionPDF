@@ -60,6 +60,8 @@ public class FirmaActivity extends AppCompatActivity {
 
     private String formularioSANI;
 
+    private String formularioCORR;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,8 @@ public class FirmaActivity extends AppCompatActivity {
             formularioAGITA=extras.getString("KEY_AGITA");
 
             formularioSANI=extras.getString("KEY_SANI");
+
+            formularioCORR=extras.getString("KEY_CORRELATIVO");
 
 
         }
@@ -170,6 +174,8 @@ public class FirmaActivity extends AppCompatActivity {
                 bundle.putString("KEY_AGITA",formularioAGITA);
 
                 bundle.putString("KEY_SANI",formularioSANI);
+
+                bundle.putString("KEY_CORRELATIVO",formularioCORR);
 
                 intent.putExtras(bundle);
 

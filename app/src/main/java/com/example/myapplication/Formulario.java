@@ -29,11 +29,22 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.myapplication.controller.EmpresaController;
 import com.example.myapplication.model.EmpresaDBContract;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -44,6 +55,8 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.example.myapplication.FirmaActivity.firmaPNG;
 
@@ -89,6 +102,7 @@ public class Formulario extends AppCompatActivity {
 
 
 
+    String correlativo="";
 
     //----
     String perimetroExt = " ";
@@ -179,8 +193,6 @@ public class Formulario extends AppCompatActivity {
 
 
 
-        
-
 
 
 
@@ -256,6 +268,8 @@ public class Formulario extends AppCompatActivity {
 
             saniVuelta=extras.getString("KEY_SANI");
 
+            correlativo=extras.getString("KEY_CORRELATIVO");
+
 
 
             txtNombreEmpresa.setText(nombreVuelta);
@@ -300,6 +314,54 @@ public class Formulario extends AppCompatActivity {
 
 
 
+
+        final String url1 = "http://cybertechnology.online/api/empresa/3";
+
+        final RequestQueue queue1 = Volley.newRequestQueue(this);
+
+
+        final JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url1, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        String array = response.toString();
+                        try {
+                            JSONArray json = new JSONArray(array);
+                            for (int i = 0; i < json.length(); i++) {
+
+                                JSONObject o = json.getJSONObject(i);
+
+                                String correlativo1 = o.getString("correlativo");
+
+                                Integer  correlativo2 = Integer.valueOf(correlativo1.replaceFirst("0000", ""));
+
+                                correlativo2++;
+
+                                correlativo = String.format("%05d", correlativo2);  // 0009
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+
+                        Log.d("Response", response.toString());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", error.toString());
+
+                    }
+                }
+        );
+        queue1.add(getRequest);
         //----------------Comprobacion---------------------
 
         //Comprobacion de campos
@@ -328,6 +390,7 @@ public class Formulario extends AppCompatActivity {
             RGroup.requestFocus();
             return;
         }
+
 
 
         //Comprobacion Checkbox
@@ -396,7 +459,42 @@ public class Formulario extends AppCompatActivity {
 
         //------------------------Fin de comprobacion----------------------------
 
+        final RequestQueue queue = Volley.newRequestQueue(this);
 
+        final String url = "http://cybertechnology.online/api/empresau/3";
+        StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+
+
+                        Log.d("Response", response);
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("correlativo", correlativo);
+
+
+                return params;
+            }
+
+        };
+
+        queue.add(putRequest);
 
         if (FirmaActivity.firmaPNG==null){
 
@@ -473,6 +571,7 @@ public class Formulario extends AppCompatActivity {
                     templatePDF.addParagraph("\n");
                     templatePDF.addParagraph("Observaciones");
                     templatePDF.addParagraph(txtObservaciones.getText().toString());
+                    templatePDF.addParagraph(correlativo);
                     templatePDF.closeDocument();
 
 
@@ -598,6 +697,7 @@ public class Formulario extends AppCompatActivity {
             templatePDF.addParagraph("\n");
             templatePDF.addParagraph("Observaciones");
             templatePDF.addParagraph(txtObservaciones.getText().toString());
+            templatePDF.addParagraph(correlativo);
             templatePDF.addImage2(firma);
             templatePDF.closeDocument();
 
@@ -734,6 +834,7 @@ public class Formulario extends AppCompatActivity {
 
 
 
+
          if (RadioServicio.isChecked()){ rbstring = "radio1";}
          if (RadioControl.isChecked()){ rbstring="radio2";}
 
@@ -795,6 +896,8 @@ public class Formulario extends AppCompatActivity {
         bundle.putString("KEY_AGITA",agita);
 
         bundle.putString("KEY_SANI",sani);
+
+        bundle.putString("KEY_CORRELATIVO",correlativo);
 
 
         intent.putExtras(bundle);
