@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <Button
+        android:id="@+id/button_inicio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="144dp"
+        android:layout_y="608dp"
+        android:text="@string/volver_al_inicio" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="362dp"
+        android:layout_height="wrap_content"
+        android:layout_x="32dp"
+        android:layout_y="304dp"
+        android:text="NO PAGASTE LA MENSUALIDAD, PONTE VIO GIL QLO"
+        android:textSize="40dp"
+        tools:layout_editor_absoluteX="185dp"
+        tools:layout_editor_absoluteY="304dp" />
+
+
+</AbsoluteLayout>

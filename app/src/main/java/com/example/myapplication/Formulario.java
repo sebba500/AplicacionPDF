@@ -192,6 +192,18 @@ public class Formulario extends AppCompatActivity {
         setContentView(R.layout.activity_formulario);
 
 
+        EmpresaController controller=new EmpresaController(getApplicationContext());
+
+        if (controller.obtenerPAGOusuarioString(EmpresaDBContract.Sesion.FIELD_ID).equals("0")) {
+
+            Intent intent=new Intent(Formulario.this,PagoActivity.class);
+
+            startActivity(intent);
+
+        }
+
+
+
         final String url1 = "http://cybertechnology.online/api/empresa/3";
 
         final RequestQueue queue1 = Volley.newRequestQueue(this);
