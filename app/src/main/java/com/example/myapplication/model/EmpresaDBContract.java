@@ -21,6 +21,7 @@ public class EmpresaDBContract {
         public static final String FIELD_ID="id";
         public static final String FIELD_PAGO="pago";
         public static final String FIELD_CORRELATIVO="correlativo";
+        public static final String FIELD_RUT="rut";
 
 
     }

@@ -77,6 +77,7 @@ public class EmpresaController {
 
 
 
+
     public String obtenerCORRELATIVOusuario(String rut){
 
         String usuario = valueOf(this.empresaModel.obtenerCORRELATIVOPorRut(rut));

@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 editor.putString(EmpresaDBContract.Sesion.FIELD_PAGO, controller.obtenerPAGOusuarioString(rut));
                                 editor.putString(EmpresaDBContract.Sesion.FIELD_CORRELATIVO, controller.obtenerCORRELATIVOusuario(rut));
-
+                                editor.putString(EmpresaDBContract.Sesion.FIELD_RUT, rut);
 
                                 editor.apply();
 

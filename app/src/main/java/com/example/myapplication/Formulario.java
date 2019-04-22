@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -68,6 +69,7 @@ public class Formulario extends AppCompatActivity {
 
     private static final Byte Base64 = null;
     //Variables
+    private TextView txtFormulario;
     private EditText txtNombreEmpresa, txtDireccionEmpresa, txtRBDEmpresa, txtObservaciones;
     private Button btnGuardar, btnEnviar;
     private RadioGroup RGroup;
@@ -129,6 +131,7 @@ public class Formulario extends AppCompatActivity {
     String Sanicitrex = "   ";
 
 
+    String pago;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -192,15 +195,13 @@ public class Formulario extends AppCompatActivity {
         setContentView(R.layout.activity_formulario);
 
 
-        EmpresaController controller=new EmpresaController(getApplicationContext());
 
-        if (controller.obtenerPAGOusuarioString(EmpresaDBContract.Sesion.FIELD_ID).equals("0")) {
 
-            Intent intent=new Intent(Formulario.this,PagoActivity.class);
 
-            startActivity(intent);
 
-        }
+
+        comprobarPago();
+
 
 
 
@@ -251,6 +252,8 @@ public class Formulario extends AppCompatActivity {
                 }
         );
         queue1.add(getRequest);
+
+
 
 
 
@@ -371,6 +374,7 @@ public class Formulario extends AppCompatActivity {
 
 
 
+        comprobarPago();
 
 
 
@@ -804,6 +808,80 @@ public class Formulario extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
+
+
+
+
+    }
+
+    public void comprobarPago(){
+
+
+
+        final String url1 = "http://cybertechnology.online/api/empresa/3";
+
+        final RequestQueue queue1 = Volley.newRequestQueue(this);
+
+
+        final JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url1, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        String array = response.toString();
+                        try {
+                            JSONArray json = new JSONArray(array);
+                            for (int i = 0; i < json.length(); i++) {
+
+                                JSONObject o = json.getJSONObject(i);
+
+                                pago = o.getString("pago");
+
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+
+
+                        SharedPreferences sesiones=getSharedPreferences(EmpresaDBContract.Sesion.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sesiones.edit();
+
+                        if (pago.equals("0")) {
+
+                            Intent intent=new Intent(Formulario.this,PagoActivity.class);
+
+                            editor.putString(EmpresaDBContract.Sesion.FIELD_PAGO, String.valueOf(pago));
+
+                            startActivity(intent);
+
+                        }
+
+
+
+                        Log.d("Response", response.toString());
+
+                    }
+
+
+
+
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", error.toString());
+
+                    }
+                }
+        );
+        queue1.add(getRequest);
+
 
 
 
