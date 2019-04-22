@@ -102,7 +102,7 @@ public class Formulario extends AppCompatActivity {
 
 
 
-    String correlativo="";
+    String correlativo;
 
     //----
     String perimetroExt = " ";
@@ -192,7 +192,53 @@ public class Formulario extends AppCompatActivity {
         setContentView(R.layout.activity_formulario);
 
 
+        final String url1 = "http://cybertechnology.online/api/empresa/3";
 
+        final RequestQueue queue1 = Volley.newRequestQueue(this);
+
+
+        final JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url1, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        String array = response.toString();
+                        try {
+                            JSONArray json = new JSONArray(array);
+                            for (int i = 0; i < json.length(); i++) {
+
+                                JSONObject o = json.getJSONObject(i);
+
+                                String correlativo1 = o.getString("correlativo");
+
+                                Integer  correlativo2 = Integer.valueOf(correlativo1.replaceFirst("0000", ""));
+
+                                correlativo2++;
+
+                                correlativo = String.format("%05d", correlativo2);  // 0009
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+
+                        Log.d("Response", response.toString());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", error.toString());
+
+                    }
+                }
+        );
+        queue1.add(getRequest);
 
 
 
@@ -315,56 +361,12 @@ public class Formulario extends AppCompatActivity {
 
 
 
-        final String url1 = "http://cybertechnology.online/api/empresa/3";
 
-        final RequestQueue queue1 = Volley.newRequestQueue(this);
-
-
-        final JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url1, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-
-                        String array = response.toString();
-                        try {
-                            JSONArray json = new JSONArray(array);
-                            for (int i = 0; i < json.length(); i++) {
-
-                                JSONObject o = json.getJSONObject(i);
-
-                                String correlativo1 = o.getString("correlativo");
-
-                                Integer  correlativo2 = Integer.valueOf(correlativo1.replaceFirst("0000", ""));
-
-                                correlativo2++;
-
-                                correlativo = String.format("%05d", correlativo2);  // 0009
-
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-
-                        Log.d("Response", response.toString());
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", error.toString());
-
-                    }
-                }
-        );
-        queue1.add(getRequest);
         //----------------Comprobacion---------------------
 
         //Comprobacion de campos
+
+
         if (txtNombreEmpresa.getText().toString().isEmpty()){
             txtNombreEmpresa.setError("El Campo esta vacio");
             txtNombreEmpresa.requestFocus();
@@ -458,6 +460,55 @@ public class Formulario extends AppCompatActivity {
 
 
         //------------------------Fin de comprobacion----------------------------
+
+        final String url1 = "http://cybertechnology.online/api/empresa/3";
+
+        final RequestQueue queue1 = Volley.newRequestQueue(this);
+
+
+        final JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url1, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        String array = response.toString();
+                        try {
+                            JSONArray json = new JSONArray(array);
+                            for (int i = 0; i < json.length(); i++) {
+
+                                JSONObject o = json.getJSONObject(i);
+
+                                String correlativo1 = o.getString("correlativo");
+
+                                Integer  correlativo2 = Integer.valueOf(correlativo1.replaceFirst("0000", ""));
+
+                                correlativo2++;
+
+                                correlativo = String.format("%05d", correlativo2);  // 0009
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+
+                        Log.d("Response", response.toString());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", error.toString());
+
+                    }
+                }
+        );
+        queue1.add(getRequest);
+
 
         final RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -578,27 +629,6 @@ public class Formulario extends AppCompatActivity {
 
 
 
-                    EmpresaController controller = new EmpresaController(getApplicationContext());
-
-
-       /* if (controller.existeono(txtNombreEmpresa.getText().toString())) {
-
-
-            try {
-                controller.crearEmpresa(txtNombreEmpresa.getText().toString(), txtDireccionEmpresa.getText().toString(), txtRBDEmpresa.getText().toString());
-                Toast.makeText(getApplicationContext(), "creado", Toast.LENGTH_LONG).show();
-            } catch (Exception e) {
-                e.printStackTrace();
-
-
-
-            }
-        }else {
-            Toast.makeText(getApplicationContext(), "ya existe", Toast.LENGTH_LONG).show();
-
-        }
-
-       */
 
 
 
@@ -827,10 +857,6 @@ public class Formulario extends AppCompatActivity {
         String broma="",trampa="",tox="";
         String cipe="",delta="",aqua="",agita="";
         String sani="";
-
-
-
-
 
 
 
