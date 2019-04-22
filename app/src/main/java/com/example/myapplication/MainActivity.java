@@ -207,8 +207,13 @@ public class MainActivity extends AppCompatActivity {
 
                             EmpresaController controller = new EmpresaController(getApplicationContext());
 
+                            if (controller.obtenerPAGOusuarioString(rut).equals("0")) {
 
-                            if (controller.usuarioLogin(rut, password)) {
+                                progressDialog.dismiss();
+
+                                Toast.makeText(getApplicationContext(), "PAGA LA WA", Toast.LENGTH_SHORT).show();
+
+                            }else if (controller.usuarioLogin(rut, password)) {
 
 
                                 Intent intent = new Intent(MainActivity.this, Formulario.class);
@@ -223,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 editor.putString(EmpresaDBContract.Sesion.FIELD_ID, controller.obtenerIDusuario(rut));
 
-                                editor.putString(EmpresaDBContract.Sesion.FIELD_PAGO, controller.obtenerPAGOusuario(rut));
+                                editor.putString(EmpresaDBContract.Sesion.FIELD_PAGO, controller.obtenerPAGOusuarioString(rut));
                                 editor.putString(EmpresaDBContract.Sesion.FIELD_CORRELATIVO, controller.obtenerCORRELATIVOusuario(rut));
 
 

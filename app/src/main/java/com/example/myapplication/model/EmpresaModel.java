@@ -33,7 +33,11 @@ public class EmpresaModel {
         db.delete(TABLE_NAME, null, null);
 
 
+        db.close();
+
         return null;
+
+
     }
 
 
@@ -42,6 +46,7 @@ public class EmpresaModel {
         SQLiteDatabase db=this.dbHelper.getWritableDatabase();
         int row = (int) DatabaseUtils.queryNumEntries(db,TABLE_NAME);
 
+        db.close();
         return row;
     }
 
@@ -133,6 +138,7 @@ public class EmpresaModel {
         usuario.put(EmpresaDBContract.EmpresaTabla.COLUMN_NAME_PASSWORD,cursor_password);
         usuario.put(EmpresaDBContract.EmpresaTabla.COLUMN_NAME_PAGO,cursor_pago);
 
+        db.close();
         return usuario;
     }
 
@@ -178,6 +184,7 @@ public class EmpresaModel {
         usuario.put(EmpresaDBContract.EmpresaTabla.COLUMN_NAME_PAGO,cursor_pago);
 
 
+        db.close();
         return usuario;
     }
 
@@ -222,6 +229,7 @@ public class EmpresaModel {
         usuario.put(EmpresaDBContract.EmpresaTabla.COLUMN_NAME_CORRELATIVO,cursor_corr);
 
 
+        db.close();
         return usuario;
     }
 

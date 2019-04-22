@@ -2,6 +2,7 @@ package com.example.myapplication.controller;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.util.Log;
 
 import com.example.myapplication.model.EmpresaDBContract;
 import com.example.myapplication.model.EmpresaModel;
@@ -63,15 +64,18 @@ public class EmpresaController {
         return usuarioN;
     }
 
-    public String obtenerPAGOusuario(String rut){
+    public String obtenerPAGOusuarioString(String rut){
 
         String usuario = valueOf(this.empresaModel.obtenerPAGOPorRut(rut));
 
         String usuarioN = usuario.replaceFirst("pago=", "");
 
 
+
         return usuarioN;
     }
+
+
 
     public String obtenerCORRELATIVOusuario(String rut){
 
