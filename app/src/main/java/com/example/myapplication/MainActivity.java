@@ -213,8 +213,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(MainActivity.this, Formulario.class);
 
-                                progressDialog.dismiss();
-                                startActivity(intent);
+
 
                                 SharedPreferences sesion = getSharedPreferences(EmpresaDBContract.Sesion.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sesion.edit();
@@ -232,6 +231,8 @@ public class MainActivity extends AppCompatActivity {
 
                                 finish();
 
+                                progressDialog.dismiss();
+                                startActivity(intent);
 
                             } else {
                                 progressDialog.dismiss();

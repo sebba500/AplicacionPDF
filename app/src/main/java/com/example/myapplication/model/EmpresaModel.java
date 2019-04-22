@@ -126,10 +126,12 @@ public class EmpresaModel {
         //PEDIR LOS DATOS AL CURSOR
         String cursor_rut=cursor.getString(cursor.getColumnIndex(EmpresaDBContract.EmpresaTabla.COLUMN_NAME_RUT));
         String cursor_password=cursor.getString(cursor.getColumnIndex(EmpresaDBContract.EmpresaTabla.COLUMN_NAME_PASSWORD));
+        String cursor_pago=cursor.getString(cursor.getColumnIndex(EmpresaDBContract.EmpresaTabla.COLUMN_NAME_PAGO));
 
         ContentValues usuario=new ContentValues();
         usuario.put(EmpresaDBContract.EmpresaTabla.COLUMN_NAME_RUT,cursor_rut);
         usuario.put(EmpresaDBContract.EmpresaTabla.COLUMN_NAME_PASSWORD,cursor_password);
+        usuario.put(EmpresaDBContract.EmpresaTabla.COLUMN_NAME_PAGO,cursor_pago);
 
         return usuario;
     }
